@@ -162,8 +162,14 @@ ejerciciosSucesivos gimnasta minutos ejercicios
 
 {-Dada una rutina y un gimnasta, obtener el resumen de rutina que es una tupla con el nombre de la misma, los kilos perdidos y la tonificación ganada 
 por dicho gimnasta al realizarla. -}
+type ResumenRutina = (NombreRutina, Peso, CoeficienteDeTonificacion)
 
-resumenRutina :: Rutina -> Gimnasta -> (NombreRutina, Peso, CoeficienteDeTonificacion)
-resumenRutina rutina gimnasta = (nombreRutina rutina, (peso nuevoGimnasta - peso gimnasta), (coeficienteDeTonificacion nuevoGimnasta - coeficienteDeTonificacion gimnasta))
-    where nuevoGimnasta = hacerRutina' rutina gimnasta
+resumenRutina :: Gimnasta -> Rutina -> ResumenRutina
+resumenRutina gimnasta rutina = (nombreRutina rutina, (peso nuevoGimnasta - peso gimnasta), (coeficienteDeTonificacion nuevoGimnasta - coeficienteDeTonificacion gimnasta))
+    where nuevoGimnasta = hacerRutina'' rutina gimnasta
 
+
+-- PUNTO 5 --
+{-Dada una lista de rutinas, obtener un resumen de todas las que (individualmente) pueden llevar a un gimnasta dado a estar saludable. -}
+rutinasSaludables :: Gimnasta -> [Rutina] -> [ResumenRutina]
+rutinasSaludables gimnasta = map (resumenRutina gimnasta) . filter (saludable .flip hacerRutina'' gimnasta) 
