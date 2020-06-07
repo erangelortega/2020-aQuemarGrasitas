@@ -130,31 +130,32 @@ rutina1 = UnaRutina {
 -- **************************--
 {-Hacer otra solución usando fold.-}
 hacerRutina :: Rutina -> Gimnasta -> Gimnasta
-hacerRutina rutina gimnasta = foldl (aplicarRutina (duracionTotal rutina / fromIntegral cantDeEjercicios)) gimnasta (ejercicios rutina)
-    where cantDeEjercicios = (length. ejercicios) rutina
-
+hacerRutina rutina gimnasta = foldl (aplicarRutina (calcularMinutos rutina)) gimnasta (ejercicios rutina)
 
 aplicarRutina :: Minutos -> Gimnasta -> Ejercicio -> Gimnasta
 aplicarRutina minutos gimnasta ejercicio = ejercicio minutos gimnasta
 
+calcularMinutos :: Rutina -> Minutos
+calcularMinutos rutina = duracionTotal rutina / fromIntegral (length. ejercicios $ rutina)
+
+    
 -- **************************--
 --    Version 2
 -- **************************--
 {-Resolverlo usando recursividad.-}
 hacerRutina' :: Rutina -> Gimnasta -> Gimnasta
-hacerRutina' rutina gimnasta = evaluarRutina gimnasta (duracionTotal rutina / fromIntegral cantDeEjercicios) (ejercicios rutina)
-    where cantDeEjercicios = (length. ejercicios) rutina
+hacerRutina' rutina gimnasta = evaluarRutina gimnasta (calcularMinutos rutina) (ejercicios rutina)
 
 evaluarRutina :: Gimnasta -> Minutos -> [Ejercicio] -> Gimnasta
 evaluarRutina gimnasta _ [] = gimnasta
 evaluarRutina gimnasta minutos (ejercicio : ejercicios) = evaluarRutina (ejercicio minutos gimnasta) minutos ejercicios
 
+
 -- **************************--
 --    version 3
 -- **************************--
 hacerRutina'' :: Rutina -> Gimnasta -> Gimnasta
-hacerRutina'' rutina gimnasta = (last . ejerciciosSucesivos gimnasta (duracionTotal rutina / fromIntegral cantDeEjercicios)) (ejercicios rutina)
-    where cantDeEjercicios = (length. ejercicios) rutina
+hacerRutina'' rutina gimnasta = (last . ejerciciosSucesivos gimnasta (calcularMinutos rutina)) (ejercicios rutina)
 
 ejerciciosSucesivos :: Gimnasta -> Minutos -> [Ejercicio] -> [Gimnasta]
 ejerciciosSucesivos gimnasta minutos ejercicios 
