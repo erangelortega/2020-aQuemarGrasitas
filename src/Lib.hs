@@ -47,15 +47,12 @@ type Calorias = Float
 quemarCalorias :: Gimnasta -> Calorias -> Gimnasta
 quemarCalorias gimnasta calorias 
     | obeso gimnasta = perderPeso (calorias / 150) gimnasta
-    | (not . obeso) gimnasta && edadMayorA 30 gimnasta && (calorias > 200 )= perderPeso 1 gimnasta
+    | (not . obeso) gimnasta && ((>30).edad) gimnasta && (calorias > 200 )= perderPeso 1 gimnasta
     | otherwise = perderPeso (calorias /(peso gimnasta * edad gimnasta)) gimnasta
 
 
 perderPeso :: Peso -> Gimnasta -> Gimnasta
-perderPeso pesoAperder gimnasta = gimnasta {peso = peso gimnasta - pesoAperder}
-
-edadMayorA :: Float -> Gimnasta -> Bool
-edadMayorA num gimnasta = edad gimnasta > num
+perderPeso pesoAperder gimnasta = gimnasta {peso = max 0 (peso gimnasta - pesoAperder)}
 
 -- PUNTO 3 -- 
 {-La cinta quema calorías en función de la velocidad promedio alcanzada durante el ejercicio, quemando 1 caloría por la velocidad promedio por minuto.
@@ -166,7 +163,7 @@ por dicho gimnasta al realizarla. -}
 type ResumenRutina = (NombreRutina, Peso, CoeficienteDeTonificacion)
 
 resumenRutina :: Gimnasta -> Rutina -> ResumenRutina
-resumenRutina gimnasta rutina = (nombreRutina rutina, (peso nuevoGimnasta - peso gimnasta), (coeficienteDeTonificacion nuevoGimnasta - coeficienteDeTonificacion gimnasta))
+resumenRutina gimnasta rutina = (nombreRutina rutina, (peso gimnasta - peso nuevoGimnasta), (coeficienteDeTonificacion nuevoGimnasta - coeficienteDeTonificacion gimnasta))
     where nuevoGimnasta = hacerRutina'' rutina gimnasta
 
 
